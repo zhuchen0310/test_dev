@@ -3,34 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <title>首页</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <style>
+        .bg-purple {
+            background: lightgoldenrodyellow;
+            }
+        .grid-content {
+            border-radius: 4px;
+            min-height: 36px;
+        }
+        .el-button {
+            background: #409EFF;
+            color: white;
+            font-family: "Microsoft YaHei";
+        }
+        .body_font {
+            font-size: 14px;
+        }
+        .el-dialog {
+            background: #E6A23C
+        }
     </style>
 </head>
+
 <body>
-    <h1 class="title" style="left: auto">首页</h1>
-    <ol id="bid_list">
-        {% for bid in bid_list %}
-            <li>
-                <h6><img src="{{ bid.image_url }}" style="margin-right: auto"/>
-                    <span style="color: rebeccapurple"> {{ bid.id }} </span> |
-                    <a class="url" style=" text-decoration: none" href="{{ bid.url }}">
-                    <span style="color: blueviolet; "> {{ bid.title | striptags}} </span> |
-                    </a>
-                    <span style="color: coral"> 原价: {{ bid.price }} 元</span> |
-                    {% if bid.ticket_amount == '0' %}
-                        <span style="color: red">无优惠券</span> |
+    <div id="app">
+        <div style="margin: 20px 0">
+            <el-button type="danger" plain>欢迎来到 京粉推广中心!</el-button>
+
+        </div>
+
+    <el-row :gutter="10">
+        <el-col :xs="24" :sm="24" :md="24">
+            <div class="grid-content bg-purple">
+                <h1 class="title" style="left: auto"></h1>
+        <ol id="bid_list">
+            {% for bid in bid_list %}
+                    <i class="el-icon-success" style="color: #F56C6C">
+                    </i>
+                <li>
+                    <div class="product_detail">
+                        <div>
+                            <a href="{{ bid.url }}">
+                                <img src="{{ bid.image_url }}" style="marker-mid: auto "/>
+                            </a>
+
+                        </div>
+                        <div class="body_font">
+                            <span style="color: rebeccapurple; font-size: 20px; color: red", class="el-icon-bell"> {{ bid.id }} </span> |
+                        <a class="url" style=" text-decoration: none" href="{{ bid.url }}">
+                        <span style="color: blueviolet; "> {{ bid.title | striptags}} </span> |
+                        </a>
+                        <span style="color: coral"> 原价: {{ bid.price }} 元</span> |
+                        {% if bid.ticket_amount == '0' %}
+                            <span style="color: red">无优惠券</span> |
+                            {% else %}
+                            <span style="color: cornflowerblue"> 领券: {{ bid.ticket_amount }} 元</span> |
+                        {% endif %}
+                        {% if bid.bonus_rate != '0' %}
+                            <span style="color: chartreuse"> 返利: {{ bid.bonus_rate }}% </span>|
                         {% else %}
-                        <span style="color: cornflowerblue"> 领券: {{ bid.ticket_amount }} 元</span> |
-                    {% endif %}
-                    {% if bid.bonus_rate != '0' %}
-                        <span style="color: chartreuse"> 返利: {{ bid.bonus_rate }}% </span>|
-                    {% else %}
-                        <span style="color: red">无返利</span> |
-                    {% endif %}
-                    <span style="color: darkmagenta"> 预计佣金: {{ bid.prize_amout }} 元</span>
-                </h6>
-            </li>
-        {% endfor %}
-    </ol>
+                            <span style="color: red">无返利</span> |
+                        {% endif %}
+                        <span style="color: darkmagenta"> 预计佣金: {{ bid.prize_amout }} 元</span>
+                        </div>
+
+                    </div>
+                </li>
+            {% endfor %}
+        </ol>
+            </div>
+        </el-col>
+    </el-row>
+    </div>
 </body>
+    <!-- 引入样式 -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: function() {
+                  return {visible: false}
+              }
+        })
+    </script>
 </html>
