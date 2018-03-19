@@ -17,12 +17,11 @@ from flask_session import Session
 engine = create_engine(DB_URI)
 
 
-
-
 def creat_app():
     app = Flask(__name__)
     app.config.from_object(config)
     return app
+
 
 app = creat_app()
 db = SQLAlchemy(app)
@@ -37,6 +36,23 @@ def manager():
 
 
 @app.route("/")
+def get_tuijian():
+    with engine.connect() as con:
+        re = con.execute(
+            """
+            select sku, title, price, bonus_rate, prize_amout, ticket_amount, case when bonus_rate and ticket_amount then bonus_rate*price+ticket_amount else 0 end as ab, case when bonus_rate then  bonus_rate * prize else 0 end as a, case when ticket_amount then ticket_amount else 0 end as b from jingfen_products where price < 200 order by ab desc;
+
+            """
+        )
+        bid_list = [
+            {"id": x[0], "title": x[1].decode('utf-8'), "price": format_app_num(x[2], f=0),
+             "bonus_rate": format(format_app_num(x[3] * 100, f=0)),
+             "prize_amout": format_app_num(x[4], f=2), "ticket_amount": format_app_num(x[5], f=0), "url": x[7],
+             "image_url": x[6]} for x in re]
+    return render_template("home.html", bid_list=bid_list)
+
+
+@app.route("/1")
 def hello_world():
     with engine.connect() as con:
         re = con.execute(
@@ -54,7 +70,7 @@ def hello_world():
     return render_template("home.html", bid_list=bid_list)
 
 
-@app.route("/filter")
+@app.route("/2")
 def get_home_filter_query():
     query_list = [
         {"name": "返利", "value": "bonus"},
@@ -64,7 +80,7 @@ def get_home_filter_query():
     return jsonify(error=RET.OK, data={"data": query_list})
 
 
-@app.route("/yongjin")
+@app.route("/3")
 def get_bid_by_prize_amout():
     with engine.connect() as con:
         where = "price < 100 and prize_amout > 10"
