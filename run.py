@@ -40,7 +40,7 @@ def get_tuijian():
     with engine.connect() as con:
         re = con.execute(
             """
-            select sku, title, price, bonus_rate, prize_amout, ticket_amount, case when bonus_rate and ticket_amount then bonus_rate*price+ticket_amount else 0 end as ab, case when bonus_rate then  bonus_rate * prize else 0 end as a, case when ticket_amount then ticket_amount else 0 end as b from jingfen_products where price < 200 order by ab desc;
+            select sku, title, price, bonus_rate, prize_amout, ticket_amount, case when bonus_rate and ticket_amount then bonus_rate*price+ticket_amount else 0 end as ab, case when bonus_rate then  bonus_rate * price else 0 end as a, case when ticket_amount then ticket_amount else 0 end as b from jingfen_products where price < 200 order by ab desc;
 
             """
         )
