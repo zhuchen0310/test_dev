@@ -7,13 +7,13 @@ from run import db
 from sqlalchemy.orm import relationship
 from common.service import Commons
 
-
 db_base = db.Column
 
 
 class BaseModel(Commons, object):
     """模型基类，为每个模型添加创建时间和更新时间"""
     now = Commons.now()
+
     def __init__(self):
         super(BaseModel, self).__init__()
 
@@ -34,7 +34,7 @@ class JingFenClass(BaseModel, db.Model):
     pic_url = db.Column(db.String(512), nullable=False, default='')
     type = db.Column(db.Integer, unique=False, nullable=False, default=0)
     content_skus = db.Column(db.Text, nullable=True, default='')
-    products = db.relationship('Product', backref='jingfenclass') # 分类下的所有产品
+    products = db.relationship('Product', backref='jingfenclass')  # 分类下的所有产品
 
     def __init__(self, name=None, jd_uid=None):
         self.create_time = self.now
@@ -54,7 +54,6 @@ class JingFenClass(BaseModel, db.Model):
             "type": self.type,
             "create_time": arrow.get(self.create_time).format(),
             "content_skus": json.loads(self.create_time)
-
         }
         return class_dict
 
@@ -68,7 +67,8 @@ class Product(BaseModel, db.Model):
     """
 
     __tablename__ = "jingfen_products"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True, index=True)
+    id = db.Column(
+        db.Integer, primary_key=True, autoincrement=True, index=True)
     title = db.Column(db.Text, nullable=False, default='')
     sku = db.Column(db.String(512), nullable=True, unique=True, index=True)
     spu = db.Column(db.String(512), nullable=True, unique=True)
@@ -87,13 +87,28 @@ class Product(BaseModel, db.Model):
     ticket_valid = db_base(db.Boolean, default=False)
     good_come = db_base(db.Integer, default=0)
     jingfen_class_id = db_base(db.Integer, db.ForeignKey('jingfen_class.id'))
-    jingfen_class = relationship('JingFenClass') # jingfen_calss 映射到JingFenClass 这个对象
+    jingfen_class = relationship(
+        'JingFenClass')  # jingfen_calss 映射到JingFenClass 这个对象
 
-    def __init__(self, jingfenclass_id, title, sku, price, bonus_rate, prize_amount, start_time=None, end_time=None,
-                 spu=None, image_url=None,
-                 url=None, link=None, ticket_id=None, ticket_total_number=None, ticket_used_number=None,
+    def __init__(self,
+                 jingfenclass_id,
+                 title,
+                 sku,
+                 price,
+                 bonus_rate,
+                 prize_amount,
+                 start_time=None,
+                 end_time=None,
+                 spu=None,
+                 image_url=None,
+                 url=None,
+                 link=None,
+                 ticket_id=None,
+                 ticket_total_number=None,
+                 ticket_used_number=None,
                  ticket_amount=None,
-                 ticket_valid=None, good_come=None):
+                 ticket_valid=None,
+                 good_come=None):
         self.jingfen_class_id = jingfenclass_id
         self.title = title
         self.sku = sku
@@ -122,6 +137,3 @@ class Product(BaseModel, db.Model):
         #     product_dict = {
         #         "jd"
         #     }
-
-
-

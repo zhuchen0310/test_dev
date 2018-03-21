@@ -41,7 +41,8 @@ class Commons(object):
         获取当前时间
         :return:
         """
-        now = arrow.now().datetime if not is_str else arrow.now().format(format)
+        now = arrow.now().datetime if not is_str else arrow.now().format(
+            format)
 
         return now
 

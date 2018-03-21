@@ -22,5 +22,5 @@ def format_app_num(num, f=2, is_separate=True):
 def fmt_two_amount(value, f=2):
     if "," in str(value):
         value = value.replace(",", "")
-    places = decimal.Decimal(10) ** -f
+    places = decimal.Decimal(10)**-f
     return decimal.Decimal(value).quantize(places, rounding=decimal.ROUND_DOWN)
